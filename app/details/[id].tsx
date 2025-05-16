@@ -13,6 +13,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { useCart } from '../context/CartContext';
+import { PRODUCTS } from '../data/products';
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -20,93 +21,16 @@ export default function DetailsScreen() {
   const { addToCart, items } = useCart();
   const [isLoading, setIsLoading] = useState(false);
 
-  const flowerDetails = {
-    1: {
-      name: 'Blushing Bloom',
-      description: 'A beautiful bouquet of vibrant tulips.',
-      price: '$25',
-      image: require('../../assets/images/bouquet1.jpg'),
-      extraImages: [
-        require('../../assets/images/bouquet10.jpg'),
-        require('../../assets/images/bouquet11.jpg'),
-        require('../../assets/images/bouquet12.jpg'),
-      ],
-      contents: {
-        main: [
-          { name: 'Rose', quantity: 2, type: 'flower' },
-          { name: 'Seven Seas', quantity: 3, type: 'flower' },
-          { name: 'Lily', quantity: 4, type: 'flower' },
-        ],
-        background: [
-          { name: "Baby's Breath", type: 'background' },
-          { name: 'Leaves', type: 'background' },
-        ],
-      },
-    },
-    2: {
-      name: 'Enchanted Petals',
-      description: 'Elegant roses in a stunning arrangement.',
-      price: '$30',
-      image: require('../../assets/images/bouquet2.jpg'),
-      extraImages: [
-        require('../../assets/images/bouquet10.jpg'),
-        require('../../assets/images/bouquet11.jpg'),
-        require('../../assets/images/bouquet12.jpg'),
-      ],
-      contents: {
-        main: [
-          { name: 'Rose', quantity: 5, type: 'flower' },
-          { name: 'Orchid', quantity: 2, type: 'flower' },
-        ],
-        background: [
-          { name: 'Eucalyptus', type: 'background' },
-          { name: "Baby's Breath", type: 'background' },
-        ],
-      },
-    },
-    3: {
-      name: 'Sunset Embrace',
-      description: 'Fresh daisies for any occasion.',
-      price: '$20',
-      image: require('../../assets/images/bouquet3.jpg'),
-      extraImages: [
-        require('../../assets/images/bouquet10.jpg'),
-        require('../../assets/images/bouquet11.jpg'),
-        require('../../assets/images/bouquet12.jpg'),
-      ],
-      contents: {
-        main: [
-          { name: 'Daisy', quantity: 6, type: 'flower' },
-          { name: 'Carnation', quantity: 2, type: 'flower' },
-        ],
-        background: [{ name: 'Leaves', type: 'background' }],
-      },
-    },
-    4: {
-      name: 'Petal Whisper',
-      description: 'Gorgeous lilies arranged perfectly.',
-      price: '$35',
-      image: require('../../assets/images/bouquet4.jpg'),
-      extraImages: [
-        require('../../assets/images/bouquet10.jpg'),
-        require('../../assets/images/bouquet11.jpg'),
-        require('../../assets/images/bouquet12.jpg'),
-      ],
-      contents: {
-        main: [
-          { name: 'Lily', quantity: 5, type: 'flower' },
-          { name: 'Tulip', quantity: 3, type: 'flower' },
-        ],
-        background: [
-          { name: 'Fern', type: 'background' },
-          { name: "Baby's Breath", type: 'background' },
-        ],
-      },
-    },
-  };
-
-  const flower = flowerDetails[id];
+  const product = PRODUCTS.find(p => p.id === Number(id));
   const isInCart = items.some(item => item.id === id.toString());
+
+  if (!product) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ fontSize: 18, color: '#666' }}>Product not found</Text>
+      </View>
+    );
+  }
 
   const handleCartAction = async () => {
     if (isInCart) {
@@ -119,9 +43,9 @@ export default function DetailsScreen() {
     
     addToCart({
       id: id.toString(),
-      name: flower.name,
-      price: flower.price,
-      image: flower.image,
+      name: product.name,
+      price: product.price,
+      image: product.image,
     });
     
     await new Promise(resolve => setTimeout(resolve, 250)); // Show success state
@@ -143,19 +67,19 @@ export default function DetailsScreen() {
 
       {/* Card */}
       <View style={styles.card}>
-        <Text style={styles.name}>{flower.name}</Text>
+        <Text style={styles.name}>{product.name}</Text>
 
         <View style={styles.imageContainer}>
-          <Image source={flower.image} style={styles.largeImage} />
+          <Image source={product.image} style={styles.largeImage} />
           <View style={styles.smallImagesColumn}>
-            {flower.extraImages.map((img, index) => (
+            {product.extraImages?.map((img, index) => (
               <Image key={index} source={img} style={styles.smallImage} />
             ))}
           </View>
         </View>
 
-        <Text style={styles.description}>{flower.description}</Text>
-        <Text style={styles.price}>{flower.price}</Text>
+        <Text style={styles.description}>{product.description}</Text>
+        <Text style={styles.price}>{product.price}</Text>
 
         {/* "This bouquet contains:" Text */}
         <Text style={styles.containsText}>This bouquet contains:</Text>
@@ -163,7 +87,7 @@ export default function DetailsScreen() {
         {/* ScrollView for contents */}
         <ScrollView style={styles.scrollContainer}>
           {/* Flower Contents */}
-          {flower.contents?.main.map((item, index) => (
+          {product.contents?.main.map((item, index) => (
             <View key={`main-${index}`} style={styles.contentBlock}>
               <View style={styles.contentLeft}>
                 <Ionicons
@@ -181,7 +105,7 @@ export default function DetailsScreen() {
           ))}
 
           {/* Background Contents */}
-          {flower.contents?.background.map((item, index) => (
+          {product.contents?.background.map((item, index) => (
             <View key={`bg-${index}`} style={styles.contentBlock}>
               <View style={styles.contentLeft}>
                 <Ionicons
@@ -204,7 +128,6 @@ export default function DetailsScreen() {
         disabled={isLoading}
         style={({ pressed }) => [
           styles.cartButton,
-          isInCart && styles.cartButtonInCart,
           pressed && styles.cartButtonPressed,
         ]}
       >
@@ -330,9 +253,6 @@ const styles = StyleSheet.create({
   },
   contentRight: {
     flex: 0.8,
-    paddingLeft: 15,
-    borderLeftWidth: 1,
-    borderLeftColor: '#D3D3D3',
   },
   contentText: {
     fontSize: 16,
@@ -344,20 +264,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#9C8CF9',
     paddingVertical: 16,
-    borderRadius: 30,
+    borderRadius: 16,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  cartButtonInCart: {
-    backgroundColor: '#6D5DF6', // Darker purple when in cart
   },
   cartButtonPressed: {
-    backgroundColor: '#6D5DF6', // Darker purple on press
-    transform: [{ scale: 0.98 }],
+    opacity: 0.8,
   },
   cartButtonText: {
     color: '#fff',

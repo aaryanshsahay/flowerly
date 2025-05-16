@@ -1,40 +1,11 @@
 import { router } from 'expo-router'; // Use expo-router's router
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// Sample data for the flowers
-const flowers = [
-  {
-    id: 1,
-    name: 'Blushing Bloom',
-    description: 'A beautiful bouquet of vibrant tulips.',
-    price: '$25',
-    image: require('../../assets/images/bouquet1.jpg'),
-  },
-  {
-    id: 2,
-    name: 'Enchanted Petals',
-    description: 'Elegant roses in a stunning arrangement.',
-    price: '$30',
-    image: require('../../assets/images/bouquet2.jpg'),
-  },
-  {
-    id: 3,
-    name: 'Sunset Embrace',
-    description: 'Fresh daisies for any occasion.',
-    price: '$20',
-    image: require('../../assets/images/bouquet3.jpg'),
-  },
-  {
-    id: 4,
-    name: 'Petal Whisper',
-    description: 'Gorgeous lilies arranged perfectly.',
-    price: '$35',
-    image: require('../../assets/images/bouquet4.jpg'),
-  },
-];
+import { PRODUCTS } from '../data/products';
 
 export default function HomeScreen() {
+  const featuredProducts = PRODUCTS.filter(product => product.isFeatured);
+
   const handleViewAll = () => {
     router.push('/bouquet'); // Navigate to bouquet tab
   };
@@ -72,16 +43,16 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.cardsContainer}>
-        {flowers.map((flower) => (
+        {featuredProducts.map((product) => (
           <TouchableOpacity
-            key={flower.id}
+            key={product.id}
             style={styles.card}
-            onPress={() => router.push(`/details/${flower.id}`)}
+            onPress={() => router.push(`/details/${product.id}`)}
           >
-            <Image source={flower.image} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{flower.name}</Text>
-            <Text style={styles.cardDescription}>{flower.description}</Text>
-            <Text style={styles.cardPrice}>{flower.price}</Text>
+            <Image source={product.image} style={styles.cardImage} />
+            <Text style={styles.cardTitle}>{product.name}</Text>
+            <Text style={styles.cardDescription}>{product.description}</Text>
+            <Text style={styles.cardPrice}>{product.price}</Text>
           </TouchableOpacity>
         ))}
       </View>
