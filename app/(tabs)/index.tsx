@@ -67,7 +67,7 @@ export default function HomeScreen() {
       <View style={styles.featuredContainer}>
         <Text style={styles.featuredText}>Featured Bouquets</Text>
         <TouchableOpacity onPress={handleViewAll}>
-          <Text style={styles.viewAllText}>View All ></Text>
+          <Text style={styles.viewAllText}>View All </Text>
         </TouchableOpacity>
       </View>
 

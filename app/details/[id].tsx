@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect } from 'react';
+import { useLocalSearchParams, router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
     Pressable,
@@ -10,11 +10,15 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator,
 } from 'react-native';
+import { useCart } from '../context/CartContext';
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
+  const { addToCart, items } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
 
   const flowerDetails = {
     1: {
@@ -102,6 +106,27 @@ export default function DetailsScreen() {
   };
 
   const flower = flowerDetails[id];
+  const isInCart = items.some(item => item.id === id.toString());
+
+  const handleCartAction = async () => {
+    if (isInCart) {
+      router.push('/cart');
+      return;
+    }
+
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 250)); // Loading animation
+    
+    addToCart({
+      id: id.toString(),
+      name: flower.name,
+      price: flower.price,
+      image: flower.image,
+    });
+    
+    await new Promise(resolve => setTimeout(resolve, 250)); // Show success state
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -173,16 +198,31 @@ export default function DetailsScreen() {
         </ScrollView>
       </View>
 
-      {/* Add to Cart */}
+      {/* Add/Go to Cart Button */}
       <Pressable
-        onPress={() => console.log('Added to cart')}
+        onPress={handleCartAction}
+        disabled={isLoading}
         style={({ pressed }) => [
           styles.cartButton,
+          isInCart && styles.cartButtonInCart,
           pressed && styles.cartButtonPressed,
         ]}
       >
-        <Ionicons name="cart-outline" size={24} color="#fff" style={{ marginRight: 8 }} />
-        <Text style={styles.cartButtonText}>Add to Cart</Text>
+        {isLoading ? (
+          <ActivityIndicator color="#fff" size="small" />
+        ) : (
+          <>
+            <Ionicons 
+              name={isInCart ? "cart" : "cart-outline"} 
+              size={24} 
+              color="#fff" 
+              style={{ marginRight: 8 }} 
+            />
+            <Text style={styles.cartButtonText}>
+              {isInCart ? 'Go to Cart' : 'Add to Cart'}
+            </Text>
+          </>
+        )}
       </Pressable>
     </View>
   );
@@ -312,8 +352,12 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 4,
   },
+  cartButtonInCart: {
+    backgroundColor: '#6D5DF6', // Darker purple when in cart
+  },
   cartButtonPressed: {
     backgroundColor: '#6D5DF6', // Darker purple on press
+    transform: [{ scale: 0.98 }],
   },
   cartButtonText: {
     color: '#fff',

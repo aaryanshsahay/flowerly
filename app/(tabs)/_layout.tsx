@@ -4,6 +4,9 @@ import React from 'react';
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -55,14 +58,29 @@ export default function TabLayout() {
         name="bouquet"
         options={{
           title: 'Bouquet',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gift.fill" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="flower" size={28} color={color} />
+          ),
         }}
       />
+
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="cart-heart" size={28} color={color}/>
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="flowers"
         options={{
-          title: 'Flowers',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="leaf.fill" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="face-woman-profile" size={28} color={color}/>
+          ),
         }}
       />
     </Tabs>

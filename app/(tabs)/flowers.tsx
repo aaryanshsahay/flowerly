@@ -7,6 +7,18 @@ export default function BouquetScreen() {
     router.replace('/');
   };
 
+  const handleProfilePress = () => {
+    router.push('/screens/ProfileScreen');
+  };
+
+  const handleSavedAddressPress = () => {
+    router.push('/screens/SavedAddressesScreen');
+  };
+
+  const handlePastOrdersPress = () => {
+    router.push('/screens/PastOrdersScreen');
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.heading}>Your Account</Text>
@@ -15,13 +27,13 @@ export default function BouquetScreen() {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Your Information</Text>
 
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={handleProfilePress}>
           <Text style={styles.rowText}>Your Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={handleSavedAddressPress}>
           <Text style={styles.rowText}>Your Saved Address</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={handlePastOrdersPress}>
           <Text style={styles.rowText}>Your Past Orders</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.row}>
