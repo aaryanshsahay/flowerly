@@ -95,6 +95,15 @@ export default function CartScreen() {
           </TouchableOpacity>
         </TouchableOpacity>
 
+        {/* Payment Mode Section */}
+        <View style={[styles.addressContainer, { marginBottom: 16 }]}>
+          <MaterialCommunityIcons name="cash" size={24} color="#9C8CF9" />
+          <View style={styles.addressTextContainer}>
+            <Text style={styles.addressLabel}>Mode of Payment:</Text>
+            <Text style={styles.addressValue}>Cash On Delivery</Text>
+          </View>
+        </View>
+
         {/* Price Breakdown */}
         <View style={styles.breakdownRow}>
           <Text style={styles.breakdownLabel}>Price for Flowers</Text>

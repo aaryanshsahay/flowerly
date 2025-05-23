@@ -3,8 +3,8 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 
 export default function BouquetScreen() {
   const handleLogout = () => {
-    // Navigate back to login screen
-    router.replace('/');
+    // Navigate to login screen
+    router.replace('/(auth)/login');
   };
 
   const handleProfilePress = () => {

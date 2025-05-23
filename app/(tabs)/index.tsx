@@ -1,5 +1,5 @@
 import { router } from 'expo-router'; // Use expo-router's router
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { PRODUCTS } from '../data/products';
 
@@ -8,6 +8,18 @@ export default function HomeScreen() {
 
   const handleViewAll = () => {
     router.push('/bouquet'); // Navigate to bouquet tab
+  };
+
+  const handleBuildBouquet = () => {
+    Alert.alert(
+      "Coming Soon! 🌸",
+      "Wow! You discovered a new feature (coming soon!!)",
+      [{ text: "Can't Wait!", style: "default" }]
+    );
+  };
+
+  const handleShopBouquets = () => {
+    router.push('/bouquet');
   };
 
   return (
@@ -26,10 +38,10 @@ export default function HomeScreen() {
         </Text>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.filledButton}>
+          <TouchableOpacity style={styles.filledButton} onPress={handleBuildBouquet}>
             <Text style={styles.filledButtonText}>Build a Bouquet</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.outlineButton}>
+          <TouchableOpacity style={styles.outlineButton} onPress={handleShopBouquets}>
             <Text style={styles.outlineButtonText}>Shop Bouquets</Text>
           </TouchableOpacity>
         </View>
